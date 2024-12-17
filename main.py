@@ -12,7 +12,14 @@ import pyttsx3
 import os
 import signal
 import re
+import sys
 
+def resource(relative_path):
+    base_path = getattr(
+        sys,
+        '_MEIPASS',
+        os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
 # Initialize TTS engine
 def init_tts():
     engine = pyttsx3.init()
@@ -61,7 +68,7 @@ def on_quit(icon, item):
 
 def create_tray_icon():
     global tray_icon
-    icon_image = Image.open("mic_icon.png")  # Load initial icon
+    icon_image = Image.open(resource("mic_icon.png"))  # Load initial icon
     menu = (MenuItem('Open', show_window), MenuItem('Mute TTS', toggle_mute),
             MenuItem('Clear Log', clear_log), MenuItem('Quit', on_quit))
     tray_icon = Icon("VoiceRecorder", icon_image, "Voice Recorder", menu)
@@ -92,7 +99,7 @@ def stop_recording():
 
 def update_icon(icon_image):
     if tray_icon:  # Check if the tray icon exists
-        tray_icon.icon = Image.open(icon_image)  # Update the tray icon image
+        tray_icon.icon = Image.open(resource(icon_image))  # Update the tray icon image
 
 def record_audio():
     global is_recording
@@ -177,7 +184,7 @@ def kill_tgpt_process():
     try:
         # Adjust the command below if tgpt is run using a different executable name
         for line in os.popen("tasklist"):
-            if "tgpt.exe" in line:  # Change this to the name of your tgpt process
+            if resource("tgpt.exe") in line:  # Change this to the name of your tgpt process
                 pid = int(line.split()[1])
                 os.kill(pid, signal.SIGTERM)
                 append_log("Killed existing tgpt process.")
