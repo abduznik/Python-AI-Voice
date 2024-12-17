@@ -22,4 +22,4 @@ This project is a Python-based application that allows users to register voice i
 
 You can install the required libraries with the following:
 ```bash
-pip install tkinter pyttsx3 pystray speech_recognition
+pip install pyttsx3 pystray speechrecognition
